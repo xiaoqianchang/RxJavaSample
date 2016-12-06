@@ -12,6 +12,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.functions.Func3;
 
 import static android.text.TextUtils.isEmpty;
@@ -89,5 +90,48 @@ public class CombineLatestActivity extends AppCompatActivity {
                         btnRegister.setEnabled(aBoolean);
                     }
                 });
+
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+
+            }
+        };
+        Subscriber<String> subscriber = new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+
+            }
+        };
+
+        Observable<String> stringObservable = Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                subscriber.onNext("1");
+                subscriber.onCompleted();
+            }
+        });
+
+        Observable<String> just = Observable.just("1", "2");
     }
 }
