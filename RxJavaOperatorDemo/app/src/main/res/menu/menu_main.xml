@@ -9,6 +9,11 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/action_observable"
+        android:orderInCategory="100"
+        android:title="observable"/>
+
+    <item
         android:id="@+id/action_debounce"
         android:orderInCategory="100"
         android:title="debounce"/>
@@ -17,4 +22,9 @@
         android:id="@+id/action_combineLatest"
         android:orderInCategory="100"
         android:title="combineLatest"/>
+
+    <item
+        android:id="@+id/action_from"
+        android:orderInCategory="100"
+        android:title="from"/>
 </menu>

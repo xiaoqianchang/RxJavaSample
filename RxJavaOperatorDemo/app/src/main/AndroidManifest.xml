@@ -21,6 +21,8 @@
         </activity>
         <activity android:name=".CombineLatestActivity">
         </activity>
+        <activity android:name=".DebounceActivity">
+        </activity>
     </application>
 
 </manifest>

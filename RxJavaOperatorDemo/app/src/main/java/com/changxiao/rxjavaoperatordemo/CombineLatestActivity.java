@@ -12,7 +12,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.functions.Func3;
 
 import static android.text.TextUtils.isEmpty;
@@ -41,6 +40,14 @@ public class CombineLatestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_combine_latest);
         ButterKnife.bind(this);
 
+        combineLatestUsage();
+    }
+
+    /**
+     * combineLatest 用法：使用combineLatest合并最近N个结点
+     *
+     */
+    private void combineLatestUsage() {
         Observable<CharSequence> edtUserNameChangeObservable = RxTextView.textChanges(edtUserName).skip(1);
         Observable<CharSequence> edtAuthCodeChangeObservable = RxTextView.textChanges(edtAuthCode).skip(1);
         Observable<CharSequence> edtUserPassChangeObservable = RxTextView.textChanges(edtUserPass).skip(1);
@@ -53,14 +60,14 @@ public class CombineLatestActivity extends AppCompatActivity {
                     @Override
                     public Boolean call(CharSequence newUserName, CharSequence newAuthCode, CharSequence newUserPass) {
                         Log.d(TAG, newUserName + " " + newAuthCode + " " + newUserPass);
-//                        boolean emailValid = !isEmpty(newUserName) &&
-//                                EMAIL_ADDRESS.matcher(newUserName).matches();
+                        //                        boolean emailValid = !isEmpty(newUserName) &&
+                        //                                EMAIL_ADDRESS.matcher(newUserName).matches();
                         boolean emailValid = !isEmpty(newUserName);
                         if (!emailValid) {
                             edtUserName.setError("Invalid UserName!");
                         }
 
-//                        boolean passValid = !isEmpty(newAuthCode) && newAuthCode.length() > 8;
+                        //                        boolean passValid = !isEmpty(newAuthCode) && newAuthCode.length() > 8;
                         boolean passValid = !isEmpty(newAuthCode);
                         if (!passValid) {
                             edtAuthCode.setError("Invalid AuthCode!");
@@ -90,48 +97,5 @@ public class CombineLatestActivity extends AppCompatActivity {
                         btnRegister.setEnabled(aBoolean);
                     }
                 });
-
-        Observer<String> observer = new Observer<String>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(String s) {
-
-            }
-        };
-        Subscriber<String> subscriber = new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(String s) {
-
-            }
-        };
-
-        Observable<String> stringObservable = Observable.create(new Observable.OnSubscribe<String>() {
-            @Override
-            public void call(Subscriber<? super String> subscriber) {
-                subscriber.onNext("1");
-                subscriber.onCompleted();
-            }
-        });
-
-        Observable<String> just = Observable.just("1", "2");
     }
 }

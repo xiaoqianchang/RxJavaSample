@@ -23,14 +23,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    @Bind(R.id.edt_input)
-    EditText edtInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // action
-        debounce(edtInput);
+        actionExercise();
     }
 
     @Override
@@ -71,43 +70,142 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_settings:
                 break;
+            case R.id.action_observable:
+                observableUsage();
+                break;
             case R.id.action_debounce:
+                intent = new Intent(this, DebounceActivity.class);
+                startActivity(intent);
                 break;
             case R.id.action_combineLatest:
                 intent = new Intent(this, CombineLatestActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.action_from:
+                fromUsage();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * 操作符：
-     * debounce:用简单的话讲就是当N个结点发生的时间太靠近（即发生的时间差小于设定的值T），debounce就会自动过滤掉前N-1个结点。
-     *          使用debounce减少频繁的网络请求。避免每输入（删除）一个字就做一次请求
-     *
-     * @param textView
-     */
-    private void debounce(TextView textView) {
-        RxTextView.textChangeEvents(textView)
-                .debounce(400, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<TextViewTextChangeEvent>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError");
-                    }
-
-                    @Override
-                    public void onNext(TextViewTextChangeEvent textViewTextChangeEvent) {
-                        Log.d(TAG, String.format("Searching for %s", textViewTextChangeEvent.text().toString()));
-                    }
-                });
+    private void actionExercise() {
+        /**
+         * 这些操作符默认不在任何特定的调度器上执行
+         */
+        Observable.empty(); // 创建一个不发射任何数据但是正常终止的Observable
+        Observable.never(); // 创建一个不发射数据也不终止的Observable
+        Observable.error(new Exception("error")); // 创建一个不发射数据以一个错误终止的Observable
     }
+
+    /**
+     * 观察者与被观察者的创建、关联方式
+     */
+    private void observableUsage() {
+        /**
+         * 观察者的创建方式
+         */
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+
+            }
+        };
+        /**
+         * 观察者Observer的抽象实现(订阅者)
+         */
+        Subscriber<String> subscriber = new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+
+            }
+        };
+
+        /**
+         * 被观察者(事件源)创建方式
+         */
+        Observable<String> stringObservable = Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                try {
+                    if (!subscriber.isUnsubscribed()) {
+                        for (int i = 0; i < 5; i++)
+                            subscriber.onNext("1");
+                        subscriber.onCompleted();
+                    }
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+
+        /**
+         * 观察者与被观察者关联在一起
+         */
+        stringObservable.subscribe(new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+
+            }
+        });
+
+    }
+
+    /**
+     * openGL三要点：
+     * 1.公理：向量与坐标系无关，向量的表示与坐标系有关。
+     * 2.R = Mr---(M为矩阵)
+     * 3.drawCircle1-canvas.save()-transformMatrix()-drawCircle2-canvas.restore()
+     */
+    private void fromUsage() {
+        Integer[] items = {0, 1, 2, 3, 4, 5};
+        Observable<Integer> from = Observable.from(items);
+        from.subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.d(TAG, String.valueOf(integer));
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.d(TAG, "Error encountered: " + throwable.getMessage());
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+                Log.d(TAG, "Sequence complete");
+            }
+        });
+    }
+
 }
