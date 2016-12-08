@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,6 +84,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_from:
                 fromUsage();
+                break;
+            case R.id.action_just:
+                justUsage();
+                break;
+            case R.id.action_interval:
+//                intervalUsage();
+                timerUsage();
                 break;
         }
 
@@ -186,6 +194,9 @@ public class MainActivity extends AppCompatActivity {
      * 1.公理：向量与坐标系无关，向量的表示与坐标系有关。
      * 2.R = Mr---(M为矩阵)
      * 3.drawCircle1-canvas.save()-transformMatrix()-drawCircle2-canvas.restore()
+     *
+     * from用法:
+     * From将数组或Iterable的数据取出然后逐个发射。
      */
     private void fromUsage() {
         Integer[] items = {0, 1, 2, 3, 4, 5};
@@ -203,7 +214,79 @@ public class MainActivity extends AppCompatActivity {
         }, new Action0() {
             @Override
             public void call() {
-                Log.d(TAG, "Sequence complete");
+                Log.d(TAG, "complete");
+            }
+        });
+    }
+
+    /**
+     * just用法:
+     * Just只是简单的原样发射，将数组或Iterable当做单个数据。
+     */
+    private void justUsage() {
+        Observable<Integer> just = Observable.just(1, 2, 3);
+        just.subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.d(TAG, String.valueOf(integer));
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.d(TAG, "Error encountered: " + throwable.getMessage());
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+                Log.d(TAG, "complete");
+            }
+        });
+    }
+
+    /**
+     * interval用法:
+     * 创建一个按固定时间间隔发射整数序列的Observable
+     */
+    private void intervalUsage() {
+        Observable<Long> interval = Observable.interval(1000, 2000, TimeUnit.MILLISECONDS);
+        interval.subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
+                Log.d(TAG, String.valueOf(aLong));
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.d(TAG, "Error encountered: " + throwable.getMessage());
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+                Log.d(TAG, "complete");
+            }
+        });
+    }
+
+    /**
+     * timer用法:
+     * 在一个给定的延迟后发射一个特殊的值。
+     */
+    private void timerUsage() {
+        Observable<Long> timer = Observable.timer(1000, TimeUnit.MILLISECONDS);
+        timer.subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
+                Log.d(TAG, String.valueOf(aLong));
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.d(TAG, "Error encountered: " + throwable.getMessage());
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+                Log.d(TAG, "complete");
             }
         });
     }

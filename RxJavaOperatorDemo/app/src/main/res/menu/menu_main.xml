@@ -27,4 +27,14 @@
         android:id="@+id/action_from"
         android:orderInCategory="100"
         android:title="from"/>
+
+    <item
+        android:id="@+id/action_just"
+        android:orderInCategory="100"
+        android:title="just"/>
+
+    <item
+        android:id="@+id/action_interval"
+        android:orderInCategory="100"
+        android:title="interval"/>
 </menu>
