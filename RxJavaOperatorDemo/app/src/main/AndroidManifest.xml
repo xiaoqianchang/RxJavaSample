@@ -23,6 +23,8 @@
         </activity>
         <activity android:name=".DebounceActivity">
         </activity>
+        <activity android:name=".BindingActivity">
+        </activity>
     </application>
 
 </manifest>

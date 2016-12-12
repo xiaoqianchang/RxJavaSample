@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">RxJavaOperatorDemo</string>
     <string name="action_settings">Settings</string>
+
+    <string name="usual_approach">常规方式</string>
+    <string name="reactive_approach">响应方式</string>
 </resources>

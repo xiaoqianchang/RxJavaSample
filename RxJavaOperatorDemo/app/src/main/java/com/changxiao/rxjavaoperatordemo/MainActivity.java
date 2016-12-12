@@ -14,7 +14,9 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding.widget.RxToolbar;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.orhanobut.logger.Logger;
 
@@ -29,9 +31,13 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 
+import static com.changxiao.rxjavaoperatordemo.R.id.fab;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private FloatingActionButton fabButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabButton = (FloatingActionButton) findViewById(fab);
+        fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -289,6 +295,33 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "complete");
             }
         });
+    }
+
+    private void mapUsage() {
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+
+            }
+        });
+    }
+
+    /**
+     * 在每次事件触发后的一定时间间隔内丢弃新的事件。常用作去抖动过滤(防止重复点击)
+     */
+    private void throttleFirstUsage() {
+        RxView.clicks(fabButton)
+                .throttleFirst(1, TimeUnit.SECONDS)
+//        .subscribe(new Action1<Void>() {
+//            @Override
+//            public void call(Void aVoid) {
+//
+//            }
+//        });
+        .subscribe(aVoid -> {});
+    }
+
+    private void clickEventsUsage() {
     }
 
 }
