@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".BindingActivity">
         </activity>
+        <activity android:name=".ListViewActivity">
+        </activity>
     </application>
 
 </manifest>

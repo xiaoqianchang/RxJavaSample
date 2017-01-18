@@ -37,4 +37,9 @@
         android:id="@+id/action_interval"
         android:orderInCategory="100"
         android:title="interval"/>
+
+    <item
+        android:id="@+id/action_listView"
+        android:orderInCategory="100"
+        android:title="listView"/>
 </menu>

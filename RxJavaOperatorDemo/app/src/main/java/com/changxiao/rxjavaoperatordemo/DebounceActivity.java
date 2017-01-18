@@ -2,6 +2,8 @@ package com.changxiao.rxjavaoperatordemo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,7 +32,22 @@ public class DebounceActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         // action
-        debounce(edtInput);
+//        textChangesDebounce(edtInput);
+        textChangeEventsDebounce(edtInput);
+        edtInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     /**
@@ -40,7 +57,7 @@ public class DebounceActivity extends AppCompatActivity {
      *
      * @param textView
      */
-    private void debounce(TextView textView) {
+    private void textChangesDebounce(TextView textView) {
         RxTextView.textChangeEvents(textView)
                 .debounce(400, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -60,5 +77,33 @@ public class DebounceActivity extends AppCompatActivity {
                         Log.d(TAG, String.format("Searching for %s", textViewTextChangeEvent.text().toString()));
                     }
                 });
+    }
+
+    private void textChangeEventsDebounce(TextView textView) {
+        RxTextView.textChanges(textView)
+                .skip(1) // 跳过第一个默认信号
+                .debounce(1000, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(x -> {
+            Log.d(TAG, String.format("Searching for %s", x.toString()));
+        });
+        /*RxTextView.textChanges(textView)
+                .debounce(400, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CharSequence>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError");
+                    }
+
+                    @Override
+                    public void onNext(CharSequence charSequence) {
+                        Log.d(TAG, String.format("Searching for %s", charSequence.toString()));
+                    }
+                });*/
     }
 }
