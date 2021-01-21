@@ -2,7 +2,7 @@ package com.chang.rxjava.operator;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
