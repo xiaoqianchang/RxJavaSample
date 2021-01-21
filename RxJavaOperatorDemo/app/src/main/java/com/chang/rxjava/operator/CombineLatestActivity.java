@@ -1,4 +1,4 @@
-package com.changxiao.rxjavaoperatordemo;
+package com.chang.rxjava.operator;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.chang.rxjava.R;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import butterknife.Bind;
@@ -15,8 +16,6 @@ import rx.Observer;
 import rx.functions.Func3;
 
 import static android.text.TextUtils.isEmpty;
-import static android.util.Patterns.EMAIL_ADDRESS;
-import static com.jakewharton.rxbinding.widget.RxTextView.textChanges;
 
 public class CombineLatestActivity extends AppCompatActivity {
 

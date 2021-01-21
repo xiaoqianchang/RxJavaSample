@@ -1,9 +1,9 @@
-package com.changxiao.rxjavaoperatordemo.common;
+package com.chang.rxjava.operator.common;
 
 import android.app.Application;
 import android.content.Context;
 
-import com.changxiao.rxjavaoperatordemo.utils.BuildConfig;
+import com.chang.rxjava.operator.utils.BuildConfig;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 

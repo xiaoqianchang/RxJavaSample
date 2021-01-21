@@ -1,4 +1,4 @@
-package com.changxiao.rxjavaoperatordemo;
+package com.chang.rxjava;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

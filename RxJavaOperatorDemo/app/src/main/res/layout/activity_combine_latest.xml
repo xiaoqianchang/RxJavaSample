@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.changxiao.rxjavaoperatordemo.CombineLatestActivity">
+    tools:context="com.chang.rxjava.operator.CombineLatestActivity">
 
     <EditText
         android:id="@+id/edt_user_name"

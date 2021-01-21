@@ -1,4 +1,4 @@
-package com.changxiao.rxjavaoperatordemo.utils;
+package com.chang.rxjava.operator.utils;
 
 /**
  * 构建配置

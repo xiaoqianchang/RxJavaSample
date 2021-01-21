@@ -1,4 +1,4 @@
-package com.changxiao.rxjavaoperatordemo;
+package com.chang.rxjava.operator;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,31 +7,23 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.TextView;
 
+import com.chang.rxjava.R;
 import com.jakewharton.rxbinding.view.RxView;
-import com.jakewharton.rxbinding.widget.RxTextView;
-import com.jakewharton.rxbinding.widget.RxToolbar;
-import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
-import com.orhanobut.logger.Logger;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 
-import static com.changxiao.rxjavaoperatordemo.R.id.fab;
+import static com.chang.rxjava.R.id.fab;
 
 public class MainActivity extends AppCompatActivity {
 

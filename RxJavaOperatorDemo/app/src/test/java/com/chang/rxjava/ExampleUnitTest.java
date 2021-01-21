@@ -1,4 +1,4 @@
-package com.changxiao.rxjavaoperatordemo;
+package com.chang.rxjava;
 
 import org.junit.Test;
 

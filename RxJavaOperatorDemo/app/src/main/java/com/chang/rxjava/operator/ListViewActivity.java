@@ -1,17 +1,18 @@
-package com.changxiao.rxjavaoperatordemo;
+package com.chang.rxjava.operator;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.chang.rxjava.R;
 
 import java.util.ArrayList;
 import java.util.List;
