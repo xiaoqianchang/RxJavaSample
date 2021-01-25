@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
                 justUsage();
                 break;
             case R.id.action_interval:
-//                intervalUsage();
-                timerUsage();
+                intervalUsage();
+//                timerUsage();
                 break;
             case R.id.action_listView:
                 intent = new Intent(this, ListViewActivity.class);
@@ -115,55 +115,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void observableUsage() {
         /**
-         * 观察者的创建方式
-         */
-        Observer<String> observer = new Observer<String>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(@NonNull String s) {
-
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-        /**
-         * 观察者Observer的抽象实现(订阅者)
-         */
-        Subscriber<String> subscriber = new Subscriber<String>() {
-            @Override
-            public void onSubscribe(Subscription s) {
-
-            }
-
-            @Override
-            public void onNext(String s) {
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-
-        /**
          * 被观察者(事件源)创建方式
          */
         Observable<String> stringObservable = Observable.create(new ObservableOnSubscribe<String>() {
@@ -172,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if (!emitter.isDisposed()) {
                         for (int i = 0; i < 5; i++)
-                            emitter.onNext("1");
+                            emitter.onNext(String.valueOf(i));
                         emitter.onComplete();
                     }
                 } catch (Exception e) {
@@ -182,25 +133,73 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /**
-         * 观察者与被观察者关联在一起
+         * 观察者的创建方式
          */
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                Log.d(TAG, "Observer-onSubscribe");
+            }
+
+            @Override
+            public void onNext(@NonNull String s) {
+                Log.d(TAG, "Observer-onNext-" + s);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.d(TAG, "Observer-onError");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "Observer-onComplete");
+            }
+        };
+        /**
+         * 观察者Observer的抽象实现(订阅者)
+         */
+        Subscriber<String> subscriber = new Subscriber<String>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+                Log.d(TAG, "Subscriber-onSubscribe");
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.d(TAG, "Subscriber-onNext-" + s);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.d(TAG, "Subscriber-onError");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "Subscriber-onComplete");
+            }
+        };
+
+        // 关联方式一
+//        stringObservable.subscribe(observer);
+        // 关联方式二
         stringObservable.subscribe(new Consumer<String>() {
             @Override
             public void accept(String s) throws Throwable {
-
+                Log.d(TAG, "Consumer-onNext-" + s);
             }
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Throwable {
-
+                Log.d(TAG, "Consumer-onError");
             }
         }, new Action() {
             @Override
             public void run() throws Throwable {
-
+                Log.d(TAG, "Consumer-onComplete");
             }
         });
-
     }
 
     /**
@@ -262,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
      * 创建一个按固定时间间隔发射整数序列的Observable
      */
     private void intervalUsage() {
-        Observable<Long> interval = Observable.interval(1000, 2000, TimeUnit.MILLISECONDS);
+        Observable<Long> interval = Observable.interval(0, 2, TimeUnit.SECONDS);
         interval.subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long aLong) {
