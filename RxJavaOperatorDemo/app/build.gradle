@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -32,22 +31,36 @@ android {
     dexOptions {
         incremental true
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
     implementation 'androidx.appcompat:appcompat:1.2.0-alpha02'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.jakewharton:butterknife:7.0.1'
+
     implementation 'com.orhanobut:logger:1.15'
-    implementation 'io.reactivex:rxandroid:1.2.1'
-    implementation 'io.reactivex:rxjava:1.1.6'
-    implementation 'com.jakewharton.rxbinding:rxbinding:1.0.0'
-    implementation 'com.jakewharton.rxbinding:rxbinding-support-v4:1.0.0'
-    implementation 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.0'
-    implementation 'com.jakewharton.rxbinding:rxbinding-design:1.0.0'
-    implementation 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:1.0.0'
+
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.9'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+    // Platform bindings
+    implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
+    // AndroidX library bindings
+    implementation 'com.jakewharton.rxbinding4:rxbinding-core:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-appcompat:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-drawerlayout:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-leanback:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-recyclerview:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-slidingpanelayout:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-swiperefreshlayout:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-viewpager:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-viewpager2:4.0.0'
+    // Google 'material' library bindings
+    implementation 'com.jakewharton.rxbinding4:rxbinding-material:4.0.0'
 }

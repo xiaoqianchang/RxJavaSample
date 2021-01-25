@@ -2,45 +2,47 @@ package com.chang.rxjava.operator;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.chang.rxjava.operator.databinding.ActivityMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.jakewharton.rxbinding4.view.RxView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
+import kotlin.Unit;
+
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.chang.rxjava.R;
-import com.jakewharton.rxbinding.view.RxView;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.util.concurrent.TimeUnit;
-
-import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
-import rx.functions.Action0;
-import rx.functions.Action1;
-
-import static com.chang.rxjava.R.id.fab;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private FloatingActionButton fabButton;
+    private ActivityMainBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
+        setSupportActionBar(mBinding.toolbar);
 
-        fabButton = (FloatingActionButton) findViewById(fab);
-        fabButton.setOnClickListener(new View.OnClickListener() {
+        mBinding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -117,17 +119,22 @@ public class MainActivity extends AppCompatActivity {
          */
         Observer<String> observer = new Observer<String>() {
             @Override
-            public void onCompleted() {
+            public void onSubscribe(@NonNull Disposable d) {
 
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onNext(@NonNull String s) {
 
             }
 
             @Override
-            public void onNext(String s) {
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
 
             }
         };
@@ -136,17 +143,22 @@ public class MainActivity extends AppCompatActivity {
          */
         Subscriber<String> subscriber = new Subscriber<String>() {
             @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
+            public void onSubscribe(Subscription s) {
 
             }
 
             @Override
             public void onNext(String s) {
+
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onComplete() {
 
             }
         };
@@ -154,17 +166,17 @@ public class MainActivity extends AppCompatActivity {
         /**
          * 被观察者(事件源)创建方式
          */
-        Observable<String> stringObservable = Observable.create(new Observable.OnSubscribe<String>() {
+        Observable<String> stringObservable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            public void call(Subscriber<? super String> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<String> emitter) throws Throwable {
                 try {
-                    if (!subscriber.isUnsubscribed()) {
+                    if (!emitter.isDisposed()) {
                         for (int i = 0; i < 5; i++)
-                            subscriber.onNext("1");
-                        subscriber.onCompleted();
+                            emitter.onNext("1");
+                        emitter.onComplete();
                     }
                 } catch (Exception e) {
-                    subscriber.onError(e);
+                    emitter.onError(e);
                 }
             }
         });
@@ -172,19 +184,19 @@ public class MainActivity extends AppCompatActivity {
         /**
          * 观察者与被观察者关联在一起
          */
-        stringObservable.subscribe(new Subscriber<String>() {
+        stringObservable.subscribe(new Consumer<String>() {
             @Override
-            public void onCompleted() {
+            public void accept(String s) throws Throwable {
 
             }
-
+        }, new Consumer<Throwable>() {
             @Override
-            public void onError(Throwable e) {
+            public void accept(Throwable throwable) throws Throwable {
 
             }
-
+        }, new Action() {
             @Override
-            public void onNext(String s) {
+            public void run() throws Throwable {
 
             }
         });
@@ -202,20 +214,20 @@ public class MainActivity extends AppCompatActivity {
      */
     private void fromUsage() {
         Integer[] items = {0, 1, 2, 3, 4, 5};
-        Observable<Integer> from = Observable.from(items);
-        from.subscribe(new Action1<Integer>() {
+        Observable<Integer> from = Observable.fromArray(items);
+        from.subscribe(new Consumer<Integer>() {
             @Override
-            public void call(Integer integer) {
+            public void accept(Integer integer) throws Throwable {
                 Log.d(TAG, String.valueOf(integer));
             }
-        }, new Action1<Throwable>() {
+        }, new Consumer<Throwable>() {
             @Override
-            public void call(Throwable throwable) {
+            public void accept(Throwable throwable) throws Throwable {
                 Log.d(TAG, "Error encountered: " + throwable.getMessage());
             }
-        }, new Action0() {
+        }, new Action() {
             @Override
-            public void call() {
+            public void run() throws Throwable {
                 Log.d(TAG, "complete");
             }
         });
@@ -227,19 +239,19 @@ public class MainActivity extends AppCompatActivity {
      */
     private void justUsage() {
         Observable<Integer> just = Observable.just(1, 2, 3);
-        just.subscribe(new Action1<Integer>() {
+        just.subscribe(new Consumer<Integer>() {
             @Override
-            public void call(Integer integer) {
+            public void accept(Integer integer) {
                 Log.d(TAG, String.valueOf(integer));
             }
-        }, new Action1<Throwable>() {
+        }, new Consumer<Throwable>() {
             @Override
-            public void call(Throwable throwable) {
+            public void accept(Throwable throwable) {
                 Log.d(TAG, "Error encountered: " + throwable.getMessage());
             }
-        }, new Action0() {
+        }, new Action() {
             @Override
-            public void call() {
+            public void run() {
                 Log.d(TAG, "complete");
             }
         });
@@ -251,19 +263,19 @@ public class MainActivity extends AppCompatActivity {
      */
     private void intervalUsage() {
         Observable<Long> interval = Observable.interval(1000, 2000, TimeUnit.MILLISECONDS);
-        interval.subscribe(new Action1<Long>() {
+        interval.subscribe(new Consumer<Long>() {
             @Override
-            public void call(Long aLong) {
+            public void accept(Long aLong) {
                 Log.d(TAG, String.valueOf(aLong));
             }
-        }, new Action1<Throwable>() {
+        }, new Consumer<Throwable>() {
             @Override
-            public void call(Throwable throwable) {
+            public void accept(Throwable throwable) {
                 Log.d(TAG, "Error encountered: " + throwable.getMessage());
             }
-        }, new Action0() {
+        }, new Action() {
             @Override
-            public void call() {
+            public void run() {
                 Log.d(TAG, "complete");
             }
         });
@@ -275,28 +287,28 @@ public class MainActivity extends AppCompatActivity {
      */
     private void timerUsage() {
         Observable<Long> timer = Observable.timer(1000, TimeUnit.MILLISECONDS);
-        timer.subscribe(new Action1<Long>() {
+        timer.subscribe(new Consumer<Long>() {
             @Override
-            public void call(Long aLong) {
+            public void accept(Long aLong) {
                 Log.d(TAG, String.valueOf(aLong));
             }
-        }, new Action1<Throwable>() {
+        }, new Consumer<Throwable>() {
             @Override
-            public void call(Throwable throwable) {
+            public void accept(Throwable throwable) {
                 Log.d(TAG, "Error encountered: " + throwable.getMessage());
             }
-        }, new Action0() {
+        }, new Action() {
             @Override
-            public void call() {
+            public void run() {
                 Log.d(TAG, "complete");
             }
         });
     }
 
     private void mapUsage() {
-        Observable.create(new Observable.OnSubscribe<String>() {
+        Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            public void call(Subscriber<? super String> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<String> emitter) throws Throwable {
 
             }
         });
@@ -306,11 +318,11 @@ public class MainActivity extends AppCompatActivity {
      * 在每次事件触发后的一定时间间隔内丢弃新的事件。常用作去抖动过滤(防止重复点击)
      */
     private void throttleFirstUsage() {
-        RxView.clicks(fabButton)
+        RxView.clicks(mBinding.fab)
                 .throttleFirst(1, TimeUnit.SECONDS)
-//        .subscribe(new Action1<Void>() {
+//        .subscribe(new Consumer<Unit>() {
 //            @Override
-//            public void call(Void aVoid) {
+//            public void accept(Unit unit) throws Throwable {
 //
 //            }
 //        });

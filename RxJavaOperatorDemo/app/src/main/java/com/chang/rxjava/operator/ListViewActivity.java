@@ -9,34 +9,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.chang.rxjava.R;
+import com.chang.rxjava.operator.databinding.ActivityListViewBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class ListViewActivity extends AppCompatActivity {
 
-    @Bind(R.id.lv_listView)
-    ListView lvListView;
-
+    private ActivityListViewBinding mBinding;
     private List<String> datas;
     private MyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_view);
-        ButterKnife.bind(this);
+        mBinding = ActivityListViewBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
         datas = new ArrayList<>();
         adapter = new MyAdapter(this, datas, 0);
-        lvListView.setAdapter(adapter);
+        mBinding.lvListView.setAdapter(adapter);
 
         asyncGetData();
     }
@@ -47,7 +42,7 @@ public class ListViewActivity extends AppCompatActivity {
         }
         adapter.notifyDataSetChanged();
 //        lvListView.setSelection(adapter.getCount());
-        lvListView.setSelection(lvListView.getBottom());
+        mBinding.lvListView.setSelection(mBinding.lvListView.getBottom());
     }
 
     static class MyAdapter<T> extends BaseAdapter {

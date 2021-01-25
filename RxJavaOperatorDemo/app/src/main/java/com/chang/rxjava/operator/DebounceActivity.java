@@ -1,41 +1,38 @@
 package com.chang.rxjava.operator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.chang.rxjava.R;
-import com.jakewharton.rxbinding.widget.RxTextView;
-import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
+import com.chang.rxjava.operator.databinding.ActivityDebounceBinding;
+import com.jakewharton.rxbinding4.widget.RxTextView;
+import com.jakewharton.rxbinding4.widget.TextViewTextChangeEvent;
 
 import java.util.concurrent.TimeUnit;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
 
 public class DebounceActivity extends AppCompatActivity {
 
     private static final String TAG = DebounceActivity.class.getSimpleName();
 
-            @Bind(R.id.edt_input)
-    EditText edtInput;
+    private ActivityDebounceBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_debounce);
-        ButterKnife.bind(this);
+        mBinding = ActivityDebounceBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
         // action
 //        textChangesDebounce(edtInput);
-        textChangeEventsDebounce(edtInput);
-        edtInput.addTextChangedListener(new TextWatcher() {
+        textChangeEventsDebounce(mBinding.edtInput);
+        mBinding.edtInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -62,20 +59,20 @@ public class DebounceActivity extends AppCompatActivity {
         RxTextView.textChangeEvents(textView)
                 .debounce(400, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<TextViewTextChangeEvent>() {
+                .subscribe(new Consumer<TextViewTextChangeEvent>() {
                     @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted");
+                    public void accept(TextViewTextChangeEvent textViewTextChangeEvent) throws Throwable {
+                        Log.d(TAG, String.format("Searching for %s", textViewTextChangeEvent.getText().toString()));
                     }
-
+                }, new Consumer<Throwable>() {
                     @Override
-                    public void onError(Throwable e) {
+                    public void accept(Throwable throwable) throws Throwable {
                         Log.d(TAG, "onError");
                     }
-
+                }, new Action() {
                     @Override
-                    public void onNext(TextViewTextChangeEvent textViewTextChangeEvent) {
-                        Log.d(TAG, String.format("Searching for %s", textViewTextChangeEvent.text().toString()));
+                    public void run() throws Throwable {
+                        Log.d(TAG, "onCompleted");
                     }
                 });
     }

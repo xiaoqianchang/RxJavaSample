@@ -1,46 +1,32 @@
 package com.chang.rxjava.operator;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.chang.rxjava.operator.databinding.ActivityBindingBinding;
 import com.google.android.material.snackbar.Snackbar;
+import com.jakewharton.rxbinding4.appcompat.RxToolbar;
+import com.jakewharton.rxbinding4.material.RxSnackbar;
+import com.jakewharton.rxbinding4.view.RxView;
+import com.jakewharton.rxbinding4.widget.RxTextView;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import kotlin.Unit;
+
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.chang.rxjava.R;
-import com.jakewharton.rxbinding.support.design.widget.RxSnackbar;
-import com.jakewharton.rxbinding.support.v7.widget.RxToolbar;
-import com.jakewharton.rxbinding.view.RxView;
-import com.jakewharton.rxbinding.widget.RxTextView;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class BindingActivity extends AppCompatActivity {
 
-    @Bind(R.id.toolbar)
-    Toolbar mTToolbar;
-    @Bind(R.id.rxbinding_et_usual_approach)
-    EditText mEtUsualApproach;
-    @Bind(R.id.rxbinding_et_reactive_approach)
-    EditText mEtReactiveApproach;
-    @Bind(R.id.rxbinding_tv_show)
-    TextView mTvShow;
-    @Bind(R.id.fab)
-    FloatingActionButton mFabFab;
+    private ActivityBindingBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_binding);
-        ButterKnife.bind(this);
+        mBinding = ActivityBindingBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
         initToolbar(); // 初始化Toolbar
         initFabButton(); // 初始化Fab按钮
@@ -50,16 +36,16 @@ public class BindingActivity extends AppCompatActivity {
     // 初始化Toolbar
     private void initToolbar() {
         // 添加菜单按钮
-        setSupportActionBar(mTToolbar);
+        setSupportActionBar(mBinding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         // 添加浏览按钮
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        RxToolbar.itemClicks(mTToolbar).subscribe(this::onToolbarItemClicked);
+        RxToolbar.itemClicks(mBinding.toolbar).subscribe(this::onToolbarItemClicked);
 
-        RxToolbar.navigationClicks(mTToolbar).subscribe(this::onToolbarNavigationClicked);
+        RxToolbar.navigationClicks(mBinding.toolbar).subscribe(this::onToolbarNavigationClicked);
     }
 
     // 点击Toolbar的项
@@ -69,7 +55,7 @@ public class BindingActivity extends AppCompatActivity {
     }
 
     // 浏览点击
-    private void onToolbarNavigationClicked(Void v) {
+    private void onToolbarNavigationClicked(Unit unit) {
         Toast.makeText(this, "浏览点击", Toast.LENGTH_SHORT).show();
     }
 
@@ -80,11 +66,11 @@ public class BindingActivity extends AppCompatActivity {
 
     // 初始化Fab按钮
     private void initFabButton() {
-        RxView.clicks(mFabFab).subscribe(this::onFabClicked);
+        RxView.clicks(mBinding.fab).subscribe(this::onFabClicked);
     }
 
     // 点击Fab按钮
-    private void onFabClicked(Void v) {
+    private void onFabClicked(Unit unit) {
         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "点击Snackbar", Snackbar.LENGTH_SHORT);
         snackbar.show();
         RxSnackbar.dismisses(snackbar).subscribe(this::onSnackbarDismissed);
@@ -99,14 +85,14 @@ public class BindingActivity extends AppCompatActivity {
     // 初始化编辑文本
     private void initEditText() {
         // 正常方式
-        mEtUsualApproach.addTextChangedListener(new TextWatcher() {
+        mBinding.mainContent.rxbindingEtUsualApproach.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mTvShow.setText(s);
+                mBinding.mainContent.rxbindingTvShow.setText(s);
             }
 
             @Override public void afterTextChanged(Editable s) {
@@ -116,6 +102,6 @@ public class BindingActivity extends AppCompatActivity {
         });
 
         // Rx方式
-        RxTextView.textChanges(mEtReactiveApproach).subscribe(mTvShow::setText);
+        RxTextView.textChanges(mBinding.mainContent.rxbindingEtReactiveApproach).subscribe(mBinding.mainContent.rxbindingTvShow::setText);
     }
 }

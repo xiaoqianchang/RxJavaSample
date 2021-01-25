@@ -1,19 +1,16 @@
 package com.chang.rxjava.operator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Function3;
+
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.EditText;
 
-import com.chang.rxjava.R;
-import com.jakewharton.rxbinding.widget.RxTextView;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Observer;
-import rx.functions.Func3;
+import com.chang.rxjava.operator.databinding.ActivityCombineLatestBinding;
+import com.jakewharton.rxbinding4.widget.RxTextView;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -21,23 +18,13 @@ public class CombineLatestActivity extends AppCompatActivity {
 
     private static final String TAG  = CombineLatestActivity.class.getSimpleName();
 
-    @Bind(R.id.edt_user_name)
-    EditText edtUserName;
-
-    @Bind(R.id.edt_auth_code)
-    EditText edtAuthCode;
-
-    @Bind(R.id.edt_user_pass)
-    EditText edtUserPass;
-
-    @Bind(R.id.btn_register)
-    Button btnRegister;
+    private ActivityCombineLatestBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_combine_latest);
-        ButterKnife.bind(this);
+        mBinding = ActivityCombineLatestBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
         combineLatestUsage();
     }
@@ -47,54 +34,54 @@ public class CombineLatestActivity extends AppCompatActivity {
      *
      */
     private void combineLatestUsage() {
-        Observable<CharSequence> edtUserNameChangeObservable = RxTextView.textChanges(edtUserName).skip(1);
-        Observable<CharSequence> edtAuthCodeChangeObservable = RxTextView.textChanges(edtAuthCode).skip(1);
-        Observable<CharSequence> edtUserPassChangeObservable = RxTextView.textChanges(edtUserPass).skip(1);
+        Observable<CharSequence> edtUserNameChangeObservable = RxTextView.textChanges(mBinding.edtUserName).skip(1);
+        Observable<CharSequence> edtAuthCodeChangeObservable = RxTextView.textChanges(mBinding.edtAuthCode).skip(1);
+        Observable<CharSequence> edtUserPassChangeObservable = RxTextView.textChanges(mBinding.edtUserPass).skip(1);
 
         Observable.combineLatest(
                 edtUserNameChangeObservable,
                 edtAuthCodeChangeObservable,
                 edtUserPassChangeObservable,
-                new Func3<CharSequence, CharSequence, CharSequence, Boolean>() {
-                    @Override
-                    public Boolean call(CharSequence newUserName, CharSequence newAuthCode, CharSequence newUserPass) {
-                        Log.d(TAG, newUserName + " " + newAuthCode + " " + newUserPass);
-                        //                        boolean emailValid = !isEmpty(newUserName) &&
-                        //                                EMAIL_ADDRESS.matcher(newUserName).matches();
-                        boolean emailValid = !isEmpty(newUserName);
-                        if (!emailValid) {
-                            edtUserName.setError("Invalid UserName!");
-                        }
+                new Function3<CharSequence, CharSequence, CharSequence, Boolean>() {
+            @Override
+            public Boolean apply(CharSequence newUserName, CharSequence newAuthCode, CharSequence newUserPass) throws Throwable {
+                Log.d(TAG, newUserName + " " + newAuthCode + " " + newUserPass);
+                //                        boolean emailValid = !isEmpty(newUserName) &&
+                //                                EMAIL_ADDRESS.matcher(newUserName).matches();
+                boolean emailValid = !isEmpty(newUserName);
+                if (!emailValid) {
+                    mBinding.edtUserName.setError("Invalid UserName!");
+                }
 
-                        //                        boolean passValid = !isEmpty(newAuthCode) && newAuthCode.length() > 8;
-                        boolean passValid = !isEmpty(newAuthCode);
-                        if (!passValid) {
-                            edtAuthCode.setError("Invalid AuthCode!");
-                        }
+                //                        boolean passValid = !isEmpty(newAuthCode) && newAuthCode.length() > 8;
+                boolean passValid = !isEmpty(newAuthCode);
+                if (!passValid) {
+                    mBinding.edtAuthCode.setError("Invalid AuthCode!");
+                }
 
-                        boolean numValid = !isEmpty(newUserPass);
-                        if (!numValid) {
-                            edtUserPass.setError("Invalid Password!");
-                        }
+                boolean numValid = !isEmpty(newUserPass);
+                if (!numValid) {
+                    mBinding.edtUserPass.setError("Invalid Password!");
+                }
 
-                        return emailValid && passValid && numValid;
-                    }
-                })
-                .subscribe(new Observer<Boolean>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError");
-                    }
-
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        btnRegister.setEnabled(aBoolean);
-                    }
-                });
+                return emailValid && passValid && numValid;
+            }
+        })
+        .subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Throwable {
+                mBinding.btnRegister.setEnabled(aBoolean);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Throwable {
+                Log.d(TAG, "onError");
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Throwable {
+                Log.d(TAG, "onCompleted");
+            }
+        });
     }
 }
