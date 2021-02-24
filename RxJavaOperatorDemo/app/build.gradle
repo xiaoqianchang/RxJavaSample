@@ -28,10 +28,6 @@ android {
         abortOnError false
     }
 
-    dexOptions {
-        incremental true
-    }
-
     buildFeatures {
         viewBinding true
     }
