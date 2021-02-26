@@ -1,4 +1,4 @@
-package com.chang.rxjava.operator;
+package com.chang.rxjava;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,7 +11,7 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.chang.rxjava.operator.databinding.ActivityListViewBinding;
+import com.chang.rxjava.databinding.ActivityListViewBinding;
 
 import java.util.ArrayList;
 import java.util.List;

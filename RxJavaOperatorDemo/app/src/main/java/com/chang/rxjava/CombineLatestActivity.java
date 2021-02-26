@@ -1,4 +1,4 @@
-package com.chang.rxjava.operator;
+package com.chang.rxjava;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.rxjava3.core.Observable;
@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.functions.Function3;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.chang.rxjava.operator.databinding.ActivityCombineLatestBinding;
+import com.chang.rxjava.databinding.ActivityCombineLatestBinding;
 import com.jakewharton.rxbinding4.widget.RxTextView;
 
 import static android.text.TextUtils.isEmpty;

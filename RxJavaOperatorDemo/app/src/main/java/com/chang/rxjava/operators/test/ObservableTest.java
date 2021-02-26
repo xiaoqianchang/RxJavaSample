@@ -1,4 +1,4 @@
-package com.chang.rxjava.operator.test;
+package com.chang.rxjava.operators.test;
 
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;

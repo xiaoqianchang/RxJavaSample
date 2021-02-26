@@ -1,6 +1,6 @@
-package com.chang.rxjava.operator;
+package com.chang.rxjava;
 
-import com.chang.rxjava.operator.databinding.ActivityBindingBinding;
+import com.chang.rxjava.databinding.ActivityBindingBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.rxbinding4.appcompat.RxToolbar;
 import com.jakewharton.rxbinding4.material.RxSnackbar;

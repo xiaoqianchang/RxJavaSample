@@ -1,4 +1,4 @@
-package com.chang.rxjava.operator.utils;
+package com.chang.rxjava.utils;
 
 /**
  * 构建配置

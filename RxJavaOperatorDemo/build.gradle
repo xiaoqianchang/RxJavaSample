@@ -27,7 +27,7 @@ ext {
     android = [
             versionCode      : VERSION_CODE.toInteger(),
             versionName      : VERSION_NAME,
-            applicationId    : 'com.chang.rxjava.operator',
+            applicationId    : 'com.chang.rxjava',
             minSdkVersion    : 19,
             targetSdkVersion : 29,
             compileSdkVersion: 29,

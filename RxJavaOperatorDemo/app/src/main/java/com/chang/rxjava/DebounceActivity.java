@@ -1,4 +1,4 @@
-package com.chang.rxjava.operator;
+package com.chang.rxjava;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -11,7 +11,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.chang.rxjava.operator.databinding.ActivityDebounceBinding;
+import com.chang.rxjava.databinding.ActivityDebounceBinding;
 import com.jakewharton.rxbinding4.widget.RxTextView;
 import com.jakewharton.rxbinding4.widget.TextViewTextChangeEvent;
 

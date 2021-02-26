@@ -1,9 +1,9 @@
-package com.chang.rxjava.operator.common;
+package com.chang.rxjava.common;
 
 import android.app.Application;
 import android.content.Context;
 
-import com.chang.rxjava.operator.utils.BuildConfig;
+import com.chang.rxjava.utils.BuildConfig;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 

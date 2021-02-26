@@ -1,10 +1,9 @@
-package com.chang.rxjava.operator;
+package com.chang.rxjava;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.chang.rxjava.operator.databinding.ActivityMainBinding;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.chang.rxjava.databinding.ActivityMainBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.rxbinding4.view.RxView;
 
@@ -17,7 +16,6 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.functions.Consumer;
-import kotlin.Unit;
 
 import android.util.Log;
 import android.view.View;
