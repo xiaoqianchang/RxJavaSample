@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.ObservableSource;
 import io.reactivex.rxjava3.functions.Function;
 
 /**
- * Description: $
+ * Description: 将一个发射数据的 Observable 变换为多个 Observables，然后将它们发射的数据合并后放进一个单独的 Observable 。
  * <p>
  * Created by Chang.Xiao on 2021/2/26 3:37 PM.
  *
