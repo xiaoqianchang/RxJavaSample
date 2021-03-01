@@ -28,8 +28,23 @@ public class MapOperator {
         });
     }
 
+    /**
+     * 类似于java中强制类型转换
+     */
+    private void castTest() {
+        Observable<Integer> just = Observable.just(1, 2, 3, 4, 5, 6);
+        Observable<Object> cast = just.cast(Object.class);
+        cast.subscribe(s -> {
+            System.out.println(s + " cast");
+        }, throwable -> {
+            System.out.println(throwable);
+        });
+    }
+
     public static void main(String[] args) {
         MapOperator operator = new MapOperator();
         operator.mapTest();
+
+        operator.castTest();
     }
 }
